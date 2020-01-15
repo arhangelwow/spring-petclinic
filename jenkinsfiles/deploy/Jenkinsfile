@@ -22,7 +22,7 @@ node('Slave1Centos'){
                 """
                 buildInfo=server.download(downloadSpec)      
                 sh """cd ${WORKSPACE}/builds/
-                nohup java -jar spring-petclinic_2.2.0.BUILD-SNAPSHOT_${BUILD_TIMESTAMP}_${buildNumber}.jar &"""
+                nohup java -jar *_${buildNumber}.jar &"""
             }
         }
     }
