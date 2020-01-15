@@ -1,6 +1,7 @@
 #!groovy
 
 node('Slave1Centos'){
+    def buildNumber = Jenkins.instance.getItem('spring_petclinic_pipeline_build').lastSuccessfulBuild.number
     def server = Artifactory.server 'Art'
     def mvnHome = tool 'MavenPet_3.6.3'  //global variable for maven installations in jenkins
     buildName '${JOB_NAME}_${BUILD_NUMBER}'
@@ -12,7 +13,7 @@ node('Slave1Centos'){
                 {
                 "files": [
                     {
-                    "pattern": "libs-release-local/*_${BUILD_NUMBER}.jar",
+                    "pattern": "libs-release-local/*_${buildNumber}.jar",
                     "target": "${WORKSPACE}/builds/",
                     "props": "type=jar;status=ready"
                     }
@@ -21,7 +22,7 @@ node('Slave1Centos'){
                 """
                 buildInfo=server.download(downloadSpec)      
                 sh """cd ${WORKSPACE}/builds/
-                nohup java -jar spring-petclinic_2.2.0.BUILD-SNAPSHOT_${BUILD_TIMESTAMP}_${BUILD_NUMBER}.jar &"""
+                nohup java -jar spring-petclinic_2.2.0.BUILD-SNAPSHOT_${BUILD_TIMESTAMP}_${buildNumber}.jar &"""
             }
         }
     }
