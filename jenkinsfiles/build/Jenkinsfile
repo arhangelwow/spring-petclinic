@@ -30,14 +30,12 @@ node('Slave1Centos'){
             }
         }//stage 4 
         stage("Quality Gate"){
-            withSonarQubeEnv('sonar') {
             timeout(time: 1, unit: 'HOURS') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
                     echo "Pipeline aborted due to quality gate failure: ${qg.status}"
                 }
             }
-          }
         }//stage 5
         stage ('Artifactory') {
             withEnv(["PATH+MAVEN=${mvnHome}/bin"]) {
