@@ -1,6 +1,10 @@
 #!groovy
 
 node('Slave1Centos'){
+    properties([
+    buildDiscarder(logRotator(daysToKeepStr: '10', numToKeepStr: '10')),
+    disableConcurrentBuilds(false)
+    ])
     def server = Artifactory.server 'Art'
     def mvnHome = tool 'MavenPet_3.6.3'  //global variable for maven installations in jenkins
     buildName '${JOB_NAME}_${BUILD_NUMBER}'
