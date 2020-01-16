@@ -30,7 +30,6 @@ node('Slave1Centos'){
             }
         }//stage 4 
         stage("Quality Gate"){
-            sleep(60)
             timeout(time: 1, unit: 'HOURS') {
                 def qg = waitForQualityGate()
                 if (qg.status != 'OK') {
