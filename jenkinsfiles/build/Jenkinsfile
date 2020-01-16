@@ -2,8 +2,7 @@
 
 node('Slave1Centos'){
     properties([
-    buildDiscarder(logRotator(daysToKeepStr: '10', numToKeepStr: '10'))//,
-    //disableConcurrentBuilds(false)
+    buildDiscarder(logRotator(daysToKeepStr: '10', numToKeepStr: '10'))
     ])
     def server = Artifactory.server 'Art'
     def mvnHome = tool 'MavenPet_3.6.3'  //global variable for maven installations in jenkins
@@ -30,6 +29,14 @@ node('Slave1Centos'){
                 }
             }
         }//stage 4 
+        stage("Quality Gate"){
+            timeout(time: 1, unit: 'HOURS') {
+                def qg = waitForQualityGate()
+                if (qg.status != 'OK') {
+                    echo "Pipeline aborted due to quality gate failure: ${qg.status}"
+                }
+            }
+        }//stage 5
         stage ('Artifactory') {
             withEnv(["PATH+MAVEN=${mvnHome}/bin"]) {
                 def IMAGE = readMavenPom().getArtifactId()
@@ -49,6 +56,6 @@ node('Slave1Centos'){
                 buildInfo=server.upload(uploadSpec) 
                 server.publishBuildInfo(buildInfo)  
             }
-        }//stage 5
+        }//stage 6
     }
 }
