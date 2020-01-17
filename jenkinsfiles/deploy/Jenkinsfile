@@ -1,11 +1,6 @@
 #!groovy
 
 node('Slave1Centos'){
-    properties([[$class: 'JiraProjectProperty'], parameters([[$class: 'MavenMetadataParameterDefinition', artifactId: '', classifier: '', credentialsId: 'art', currentArtifactInfoLabel: '',
-    currentArtifactInfoPattern: '',
-    currentArtifactInfoUrl: 'http://epuakhaw2173-art:8081/artifactory/webapp/#/artifacts/browse/tree/General/libs-release-local/spring-petclinic_2.2.0.BUILD-SNAPSHOT_2020-01_16-15-37_159.jar',
-    defaultValue: 'LATEST', description: '', groupId: ' libs-release-local/', maxVersions: '5', name: 'deploy_version', packaging: 'jar', repoBaseUrl: 'http://epuakhaw2173-art:8081/artifactory',
-    sortOrder: <object of type eu.markov.jenkins.plugin.mvnmeta.MavenMetadataParameterDefinition.SortOrder>, versionFilter: '']])])
     def buildNumber = Jenkins.instance.getItem('spring_petclinic_pipeline_build').lastSuccessfulBuild.number
     def server = Artifactory.server 'Art'
     buildName '${JOB_NAME}_${BUILD_NUMBER}'
